@@ -1,0 +1,37 @@
+﻿@model List<zTest2.Models.TblReceipt>
+@{
+    ViewBag.Title = "Purchase";
+}
+@using zTest2.Models
+
+<h2>Your purchase</h2>
+<br/>
+<h4>Date: @Model[0].DateAndTime</h4>
+<h4>User: @((Session["user"] as TblUser).FirstName) @((Session["user"] as TblUser).LastName)</h4>
+<br/>
+
+@{int total = 0;}
+<table class="table-striped" style="width: 100%">
+    <tr><th>No.</th><th>Device name</th><th>Price</th><th>Amount</th><th>Tax</th><th>Price with tax</th></tr>
+   
+    @foreach (TblReceipt item in Model)
+    {
+        total += item.PriceWithTax.Value;
+        <tr>
+            <td>@Html.Raw((Model.IndexOf(item) + 1) + ".")</td>
+            <td>@item.TblDevice.DeviceName</td>
+            <td>@item.TblDevice.Price</td>
+            <td>@item.Amount</td>
+            <td>@item.Tax@Html.Raw("%")</td>
+            <td>@item.PriceWithTax</td>
+        </tr>
+    }
+    <tr>
+        <td></td>
+        <td></td
+        <td></td>
+        <td></td>
+        <td>Total:</td>
+        <td>@total</td>
+    </tr>
+</table>

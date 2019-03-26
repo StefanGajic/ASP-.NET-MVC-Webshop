@@ -1,0 +1,57 @@
+﻿@model zTest2.Models.TblShop
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ShopName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ShopName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NoOfEmployees)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NoOfEmployees)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TaxIdentificationNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TaxIdentificationNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateOfFounding)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateOfFounding)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ShopId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

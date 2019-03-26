@@ -1,0 +1,182 @@
+﻿@model IEnumerable<zTest2.Models.TblDevice>
+
+@{
+    ViewBag.Title = "Devices";
+}
+
+<h2>Devices</h2>
+
+<p class="text-success">@ViewBag.Message</p>
+
+@if (Session["user"] != null) {
+    if ((Session["user"] as zTest2.Models.TblUser).Role) { 
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    }
+    else
+    {
+        <script>
+            function ajaxAdd(deviceId) {
+                var original_amount = $("#quantity-" + deviceId).val();
+                $.post(
+                    "/ShoppingCart/Add",
+                    {
+                        "id": deviceId,
+                        "amount": $("#amount-" + deviceId).val()
+                    },
+                    function (responseText)
+                    {
+                        try {
+                            var newAmount = parseInt(responseText);
+                            alert("Item/s have been successfully added to your cart!");
+                            $("#quantity-" + deviceId).text(responseText);
+                            $("#amount-" + deviceId).attr("max", responseText);
+                            $("#amount-" + deviceId).attr("value", responseText);
+
+                            if (newAmount == 0) {
+                                $("#row-" + deviceId).hide(200);
+                                document.getElementById("msg-" + deviceId).hidden = false;
+                            }
+                        } catch (e) {
+                            alert("An error has occured while trying to add your items!");
+                        }
+                    }
+                    );
+            };
+        </script>
+    }
+}
+else
+{
+    <p class="text-warning">
+        Please log in to shop
+    </p>
+}
+
+<div style="float: right; margin-top: -30px; margin-bottom: 20px; width: 400px;">
+    @using (@Html.BeginForm("Search", "Devices", FormMethod.Post, new { id = "searchForm"}))
+    {
+    <input class="form-control" style="width: 195px; float: left;" name="searchQuery" type="text" placeholder="Search"/>
+    <select class="form-control" style="width: 195px; float: right;" name="searchCriteria" form="searchForm">
+        <option value="1">Device name</option>
+        <option value="2">Device description</option>
+        <option value="3">Device components</option>
+        <option value="4">Made in country</option>
+        <option value="5">Category</option>
+        <option value="6">Shop name</option>
+    </select>
+    <button class="btn btn-primary" style="float: right; width: 150px; margin-top: 10px">Search</button>
+    }
+</div>
+
+<style>
+    .row-background {
+        background: rgb(30, 87, 153);
+        color: white;
+    }
+</style>
+
+<table class="table">
+    <tr class="row-background">
+        <th>
+            @Html.DisplayNameFor(model => model.DeviceName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DescriptionDevice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Components)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MadeInCountry)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Picture)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TblCategory.CategoryName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TblShop.ShopName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DeviceName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DescriptionDevice)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Components)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MadeInCountry)
+        </td>
+        <td id="quantity-@Html.Raw(item.DeviceId)">
+            @Html.DisplayFor(modelItem => item.Quantity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Price)
+        </td>
+        <td>
+            <img src="~/Content/DeviceImages/@Html.DisplayTextFor(modelItem => item.Picture)" style="max-width: 50px; max-height: 50px;" />
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TblCategory.CategoryName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TblShop.ShopName)
+        </td>
+        <td>
+            @Html.ActionLink("Details", "Details", new { id = item.DeviceId })
+
+            @if (Session["user"] != null)
+            {
+                if ((Session["user"] as zTest2.Models.TblUser).Role)
+                {
+
+                    @Html.Raw(" | ")
+                    @Html.ActionLink("Edit", "Edit", new { id = item.DeviceId })
+                    @Html.Raw(" | ")
+                    @Html.ActionLink("Delete", "Delete", new { id = item.DeviceId })
+
+                }
+            }
+        </td>
+
+        <td id="row-@Html.Raw(item.DeviceId)">
+            @if (Session["user"] != null)
+            {
+                if (!(Session["user"] as zTest2.Models.TblUser).Role)
+                {
+                    if (item.Quantity > 0)
+                    {
+                        @Html.Raw("<input id=\"amount-" + item.DeviceId + "\" type=\"number\" style=\"width: 50px\" min=\"1\" max=\"" + item.Quantity + "\" value=\"1\"><br/>")
+                        @Html.Raw("<button class=\"btn btn-primary\" onclick=\"return ajaxAdd(" + item.DeviceId + ")\">Add to cart</button>")
+                    }
+                    else
+                    {
+                        <p class="text-warning">Out of stock</p>
+                    }
+                }
+            }
+        </td>
+        <td id="msg-@Html.Raw(item.DeviceId)" hidden>
+            <p class="text-warning">Out of stock</p>
+        </td>
+
+    </tr>
+}
+
+</table>

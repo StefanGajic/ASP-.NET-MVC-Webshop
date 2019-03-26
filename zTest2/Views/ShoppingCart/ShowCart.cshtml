@@ -1,0 +1,95 @@
+﻿@model zTest2.Models.TblCart
+@{
+    ViewBag.Title = "My Cart";
+}
+
+<h2>My Cart</h2>
+
+@if (Model == null)
+{
+    <h3 class="text-warning">Your cart is empty</h3>
+    <h3>Continue shopping @Html.ActionLink("here", "Index", "Devices", new {}, new {})</h3>
+}
+else
+{
+    if (Model.TblCartItems.Count == 0)
+    {
+        <h3 class="text-warning">Your cart is empty</h3>
+        <h3>Continue shopping @Html.ActionLink("here", "Index", "Devices", new { }, new { })</h3>
+    }
+    else
+    {
+        <script>
+            function ajaxRemove(deviceId) {
+                $.post(
+                    "/ShoppingCart/Remove",
+                    {
+                        "cart_id": @Model.CartId,
+                        "device_id": deviceId,
+                        "amount": $("#amount-"+deviceId).val()
+                    },
+                    function (responseText)
+                    {
+                        try {
+                            var newAmount = parseInt(responseText);
+                            alert("Item/s have been successfully removed from your cart!");
+
+                            var quantity = $("#quantity-" + deviceId).text();
+                            var price = parseInt($("#price-" + deviceId).text()) / parseInt(quantity);
+
+                            $("#quantity-" + deviceId).text(responseText);
+                            $("#price-" + deviceId).text(parseInt(responseText) * price);
+                            $("#amount-" + deviceId).attr("max", responseText);
+                            $("#amount-" + deviceId).attr("value", responseText);
+
+                            if (responseText.localeCompare("0") === 0) {
+                                $("#row-" + deviceId).hide(200);
+
+                                var pos = $("#complete").position();
+                                if (pos.top < 280){
+                                    $("#complete").hide(200);
+                                    $("#cartTable").hide(200);
+                                    document.getElementById("empty1").hidden = false;
+                                    document.getElementById("empty2").hidden = false;
+                                }
+                            }
+                        } catch (e) {
+                            alert("An error has occured while trying to remove items!");
+                            console.log(e);
+                        }
+                    }
+                    );
+            };
+        </script>
+
+    <h3 id="empty1" class="text-warning" hidden>Your cart is empty</h3>
+    <h3 id="empty2" hidden>Continue shopping @Html.ActionLink("here", "Index", "Devices", new { }, new { })</h3>
+
+    <table id="cartTable" class="table table-bordered">
+        <tr>
+            <th>Device</th>
+            <th>Amount</th>
+            <th>Price</th>
+        </tr>
+        @foreach (zTest2.Models.TblCartItem item in Model.TblCartItems)
+        {
+            <tr id="row-@Html.Raw(item.DeviceId)">
+                <td>
+                    @Html.Raw(new zTest2.Models.zTest2DBEntities().TblDevices.Find(item.DeviceId).DeviceName)
+                </td>
+                <td id="quantity-@Html.Raw(item.DeviceId)">
+                    @Html.Raw(item.Amount)
+                </td>
+                <td id="price-@Html.Raw(item.DeviceId)">
+                    @Html.Raw(int.Parse(item.TblDevice.Price) * item.Amount)
+                </td>
+                <td>
+                    @Html.Raw("<input id=\"amount-" + item.DeviceId + "\" type=\"number\" style=\"width: 50px\" min=\"1\" max=\"" + item.Amount + "\" value=\"1\"><br/>")
+                    @Html.Raw("<button class=\"btn btn-danger\" onclick=\"ajaxRemove(" + item.DeviceId + ")\">Remove from cart</button>")
+                </td>
+            </tr>
+        }
+    </table>
+        @Html.Raw("<a id=\"complete\" class=\"btn\" href=\"Purchase\">Complete purchase</a>")
+    }
+}

@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Computer shop</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+    <style>
+        .nav-background {
+                background: -moz-linear-gradient(left, #1e5799 30%, #207cca 100%);
+                background: -webkit-linear-gradient(left, #1e5799 30%,#207cca 100%);
+                background: linear-gradient(to right, #1e5799 30%,#207cca 100%);
+                filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#207cca',GradientType=1 );
+        }
+        .nav-links {
+            color: rgb(240, 240, 240) !important;
+        }
+        .nav-links:hover {
+            color: rgb(247, 228, 153) !important;
+        }
+        .navbar-brand {
+            color: rgb(247, 228, 153) !important;
+        }
+    </style>
+    <div class="navbar navbar-inverse navbar-fixed-top nav-background">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("About", "About", "Home", null, new { @class = "nav-links" })</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home", null, new { @class = "nav-links" })</li>
+                    <li>@Html.ActionLink("Devices", "Index", "Devices", null, new { @class = "nav-links" })</li>
+                    @if (Session["user"] != null)
+                    {
+                        if ((Session["user"] as zTest2.Models.TblUser).Role)
+                        {    
+                            <li>@Html.ActionLink("Categories", "Index", "Categories", null, new { @class = "nav-links" })</li>                   
+                            <li>@Html.ActionLink("Shops", "Index", "Shops", null, new { @class = "nav-links" })</li>
+                        }
+                    }   
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Computer Shop</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

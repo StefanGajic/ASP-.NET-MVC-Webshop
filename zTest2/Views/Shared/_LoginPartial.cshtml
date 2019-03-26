@@ -1,0 +1,26 @@
+﻿@if (Session["user"] != null)
+{
+
+    <ul class="nav navbar-nav navbar-right">
+        <li>
+            @Html.ActionLink("Hello " + (Session["user"] as zTest2.Models.TblUser).UserName + "!", "Index", "Manage", null, new { @class = "nav-links" })
+        </li>
+        @if ((Session["user"] as zTest2.Models.TblUser).Role)
+        {
+            <li>@Html.ActionLink("Give admin rights", "AdminRights", "Account", null, new { @class = "nav-links" })</li>
+        }
+        else
+        {
+            <li>@Html.ActionLink("My Cart", "ShowCart", "ShoppingCart", null, new { @class = "nav-links" })</li>
+        }
+        <li>@Html.ActionLink("Log off", "LogOff", "Home", null, new { @class = "nav-links" })</li>
+    </ul>
+
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "nav-links" })</li>
+        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "nav-links" })</li>
+    </ul>
+}

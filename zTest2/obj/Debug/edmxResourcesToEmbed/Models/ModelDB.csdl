@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="zTest2DBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="TblCategory">
+    <Key>
+      <PropertyRef Name="CategoryId" />
+    </Key>
+    <Property Name="CategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Subcategory" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="TblDevices" Relationship="Self.FK__TblDevice__Categ__15502E78" FromRole="TblCategory" ToRole="TblDevice" />
+  </EntityType>
+  <EntityType Name="TblDevice">
+    <Key>
+      <PropertyRef Name="DeviceId" />
+    </Key>
+    <Property Name="DeviceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DeviceName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DescriptionDevice" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Components" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Shop" Type="Int32" />
+    <Property Name="MadeInCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Quantity" Type="Int32" />
+    <Property Name="Price" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Picture" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+    <Property Name="Category" Type="Int32" />
+    <NavigationProperty Name="TblCategory" Relationship="Self.FK__TblDevice__Categ__15502E78" FromRole="TblDevice" ToRole="TblCategory" />
+    <NavigationProperty Name="TblShop" Relationship="Self.FK__TblDevice__Shop__145C0A3F" FromRole="TblDevice" ToRole="TblShop" />
+    <NavigationProperty Name="TblCartItems" Relationship="zTest2DBModel.FK_TblCartItems_TblDevice" FromRole="TblDevice" ToRole="TblCartItem" />
+    <NavigationProperty Name="TblReceipts" Relationship="zTest2DBModel.FK__TblReceip__Devic__182C9B23" FromRole="TblDevice" ToRole="TblReceipt" />
+    <Property Name="Active" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="TblShop">
+    <Key>
+      <PropertyRef Name="ShopId" />
+    </Key>
+    <Property Name="ShopId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ShopName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="NoOfEmployees" Type="Int32" />
+    <Property Name="TaxIdentificationNo" Type="Int32" />
+    <Property Name="DateOfFounding" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="TblDevices" Relationship="Self.FK__TblDevice__Shop__145C0A3F" FromRole="TblShop" ToRole="TblDevice" />
+  </EntityType>
+  <Association Name="FK__TblDevice__Categ__15502E78">
+    <End Role="TblCategory" Type="Self.TblCategory" Multiplicity="0..1" />
+    <End Role="TblDevice" Type="Self.TblDevice" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TblCategory">
+        <PropertyRef Name="CategoryId" />
+      </Principal>
+      <Dependent Role="TblDevice">
+        <PropertyRef Name="Category" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__TblDevice__Shop__145C0A3F">
+    <End Role="TblShop" Type="Self.TblShop" Multiplicity="0..1" />
+    <End Role="TblDevice" Type="Self.TblDevice" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TblShop">
+        <PropertyRef Name="ShopId" />
+      </Principal>
+      <Dependent Role="TblDevice">
+        <PropertyRef Name="Shop" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="zTest2DBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="TblCategories" EntityType="Self.TblCategory" />
+    <EntitySet Name="TblDevices" EntityType="Self.TblDevice" />
+    <EntitySet Name="TblShops" EntityType="Self.TblShop" />
+    <AssociationSet Name="FK__TblDevice__Categ__15502E78" Association="Self.FK__TblDevice__Categ__15502E78">
+      <End Role="TblCategory" EntitySet="TblCategories" />
+      <End Role="TblDevice" EntitySet="TblDevices" />
+    </AssociationSet>
+    <AssociationSet Name="FK__TblDevice__Shop__145C0A3F" Association="Self.FK__TblDevice__Shop__145C0A3F">
+      <End Role="TblShop" EntitySet="TblShops" />
+      <End Role="TblDevice" EntitySet="TblDevices" />
+    </AssociationSet>
+    <EntitySet Name="TblUsers" EntityType="zTest2DBModel.TblUser" />
+    <EntitySet Name="TblCarts" EntityType="zTest2DBModel.TblCart" />
+    <EntitySet Name="TblCartItems" EntityType="zTest2DBModel.TblCartItem" />
+    <AssociationSet Name="FK_TblCart_TblUsers" Association="zTest2DBModel.FK_TblCart_TblUsers">
+      <End Role="TblUser" EntitySet="TblUsers" />
+      <End Role="TblCart" EntitySet="TblCarts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TblCartItems_TblCart" Association="zTest2DBModel.FK_TblCartItems_TblCart">
+      <End Role="TblCart" EntitySet="TblCarts" />
+      <End Role="TblCartItem" EntitySet="TblCartItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TblCartItems_TblDevice" Association="zTest2DBModel.FK_TblCartItems_TblDevice">
+      <End Role="TblDevice" EntitySet="TblDevices" />
+      <End Role="TblCartItem" EntitySet="TblCartItems" />
+    </AssociationSet>
+    <EntitySet Name="TblReceipts" EntityType="zTest2DBModel.TblReceipt" />
+    <AssociationSet Name="FK__TblReceip__Devic__182C9B23" Association="zTest2DBModel.FK__TblReceip__Devic__182C9B23">
+      <End Role="TblDevice" EntitySet="TblDevices" />
+      <End Role="TblReceipt" EntitySet="TblReceipts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TblReceipt_TblUsers" Association="zTest2DBModel.FK_TblReceipt_TblUsers">
+      <End Role="TblUser" EntitySet="TblUsers" />
+      <End Role="TblReceipt" EntitySet="TblReceipts" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="TblUser">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserName" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="FirstName" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Password" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="Role" Type="Boolean" Nullable="false" />
+    <Property Name="Phone" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="TblCarts" Relationship="zTest2DBModel.FK_TblCart_TblUsers" FromRole="TblUser" ToRole="TblCart" />
+    <NavigationProperty Name="TblReceipts" Relationship="zTest2DBModel.FK_TblReceipt_TblUsers" FromRole="TblUser" ToRole="TblReceipt" />
+  </EntityType>
+  <EntityType Name="TblCart">
+    <Key>
+      <PropertyRef Name="CartId" />
+    </Key>
+    <Property Name="CartId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="TblUser" Relationship="zTest2DBModel.FK_TblCart_TblUsers" FromRole="TblCart" ToRole="TblUser" />
+    <NavigationProperty Name="TblCartItems" Relationship="zTest2DBModel.FK_TblCartItems_TblCart" FromRole="TblCart" ToRole="TblCartItem" />
+  </EntityType>
+  <EntityType Name="TblCartItem">
+    <Key>
+      <PropertyRef Name="CartId" />
+      <PropertyRef Name="DeviceId" />
+    </Key>
+    <Property Name="CartId" Type="Int32" Nullable="false" />
+    <Property Name="DeviceId" Type="Int32" Nullable="false" />
+    <Property Name="Amount" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="TblCart" Relationship="zTest2DBModel.FK_TblCartItems_TblCart" FromRole="TblCartItem" ToRole="TblCart" />
+    <NavigationProperty Name="TblDevice" Relationship="zTest2DBModel.FK_TblCartItems_TblDevice" FromRole="TblCartItem" ToRole="TblDevice" />
+  </EntityType>
+  <Association Name="FK_TblCart_TblUsers">
+    <End Type="zTest2DBModel.TblUser" Role="TblUser" Multiplicity="1" />
+    <End Type="zTest2DBModel.TblCart" Role="TblCart" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TblUser">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="TblCart">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TblCartItems_TblCart">
+    <End Type="zTest2DBModel.TblCart" Role="TblCart" Multiplicity="1" />
+    <End Type="zTest2DBModel.TblCartItem" Role="TblCartItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TblCart">
+        <PropertyRef Name="CartId" />
+      </Principal>
+      <Dependent Role="TblCartItem">
+        <PropertyRef Name="CartId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TblCartItems_TblDevice">
+    <End Type="zTest2DBModel.TblDevice" Role="TblDevice" Multiplicity="1" />
+    <End Type="zTest2DBModel.TblCartItem" Role="TblCartItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TblDevice">
+        <PropertyRef Name="DeviceId" />
+      </Principal>
+      <Dependent Role="TblCartItem">
+        <PropertyRef Name="DeviceId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="TblReceipt">
+    <Key>
+      <PropertyRef Name="Receiptld" />
+    </Key>
+    <Property Name="Receiptld" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DeviceId" Type="Int32" />
+    <Property Name="Tax" Type="Int32" />
+    <Property Name="PriceWithTax" Type="Int32" />
+    <Property Name="DateAndTime" Type="DateTime" Precision="3" />
+    <Property Name="UserId" Type="Int32" />
+    <Property Name="Amount" Type="Int32" />
+    <NavigationProperty Name="TblDevice" Relationship="zTest2DBModel.FK__TblReceip__Devic__182C9B23" FromRole="TblReceipt" ToRole="TblDevice" />
+    <NavigationProperty Name="TblUser" Relationship="zTest2DBModel.FK_TblReceipt_TblUsers" FromRole="TblReceipt" ToRole="TblUser" />
+  </EntityType>
+  <Association Name="FK__TblReceip__Devic__182C9B23">
+    <End Type="zTest2DBModel.TblDevice" Role="TblDevice" Multiplicity="0..1" />
+    <End Type="zTest2DBModel.TblReceipt" Role="TblReceipt" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TblDevice">
+        <PropertyRef Name="DeviceId" />
+      </Principal>
+      <Dependent Role="TblReceipt">
+        <PropertyRef Name="DeviceId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TblReceipt_TblUsers">
+    <End Type="zTest2DBModel.TblUser" Role="TblUser" Multiplicity="0..1" />
+    <End Type="zTest2DBModel.TblReceipt" Role="TblReceipt" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TblUser">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="TblReceipt">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

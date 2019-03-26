@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="zTest2DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="TblCart">
+    <Key>
+      <PropertyRef Name="CartId" />
+    </Key>
+    <Property Name="CartId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TblCartItems">
+    <Key>
+      <PropertyRef Name="CartId" />
+      <PropertyRef Name="DeviceId" />
+    </Key>
+    <Property Name="CartId" Type="int" Nullable="false" />
+    <Property Name="DeviceId" Type="int" Nullable="false" />
+    <Property Name="Amount" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TblCategory">
+    <Key>
+      <PropertyRef Name="CategoryId" />
+    </Key>
+    <Property Name="CategoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CategoryName" Type="nvarchar" MaxLength="50" />
+    <Property Name="Description" Type="nvarchar" MaxLength="50" />
+    <Property Name="Subcategory" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="TblDevice">
+    <Key>
+      <PropertyRef Name="DeviceId" />
+    </Key>
+    <Property Name="DeviceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DeviceName" Type="nvarchar" MaxLength="50" />
+    <Property Name="DescriptionDevice" Type="text" />
+    <Property Name="Components" Type="text" />
+    <Property Name="Shop" Type="int" />
+    <Property Name="MadeInCountry" Type="nvarchar" MaxLength="50" />
+    <Property Name="Quantity" Type="int" />
+    <Property Name="Price" Type="nvarchar" MaxLength="50" />
+    <Property Name="Picture" Type="nvarchar" MaxLength="100" />
+    <Property Name="Category" Type="int" />
+    <Property Name="Active" Type="bit" />
+  </EntityType>
+  <EntityType Name="TblReceipt">
+    <Key>
+      <PropertyRef Name="Receiptld" />
+    </Key>
+    <Property Name="Receiptld" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DeviceId" Type="int" />
+    <Property Name="Tax" Type="int" />
+    <Property Name="PriceWithTax" Type="int" />
+    <Property Name="DateAndTime" Type="datetime" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="Amount" Type="int" />
+  </EntityType>
+  <EntityType Name="TblShop">
+    <Key>
+      <PropertyRef Name="ShopId" />
+    </Key>
+    <Property Name="ShopId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ShopName" Type="nvarchar" MaxLength="50" />
+    <Property Name="Address" Type="nvarchar" MaxLength="50" />
+    <Property Name="NoOfEmployees" Type="int" />
+    <Property Name="TaxIdentificationNo" Type="int" />
+    <Property Name="DateOfFounding" Type="date" />
+  </EntityType>
+  <EntityType Name="TblUsers">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserName" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="FirstName" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="LastName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Password" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="Role" Type="bit" Nullable="false" />
+    <Property Name="Phone" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Email" Type="varchar" MaxLength="60" Nullable="false" />
+  </EntityType>
+  <Association Name="FK__TblDevice__Categ__15502E78">
+    <End Role="TblCategory" Type="Self.TblCategory" Multiplicity="0..1" />
+    <End Role="TblDevice" Type="Self.TblDevice" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TblCategory">
+        <PropertyRef Name="CategoryId" />
+      </Principal>
+      <Dependent Role="TblDevice">
+        <PropertyRef Name="Category" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__TblDevice__Shop__145C0A3F">
+    <End Role="TblShop" Type="Self.TblShop" Multiplicity="0..1" />
+    <End Role="TblDevice" Type="Self.TblDevice" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TblShop">
+        <PropertyRef Name="ShopId" />
+      </Principal>
+      <Dependent Role="TblDevice">
+        <PropertyRef Name="Shop" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__TblReceip__Devic__182C9B23">
+    <End Role="TblDevice" Type="Self.TblDevice" Multiplicity="0..1" />
+    <End Role="TblReceipt" Type="Self.TblReceipt" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TblDevice">
+        <PropertyRef Name="DeviceId" />
+      </Principal>
+      <Dependent Role="TblReceipt">
+        <PropertyRef Name="DeviceId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TblCart_TblUsers">
+    <End Role="TblUsers" Type="Self.TblUsers" Multiplicity="1" />
+    <End Role="TblCart" Type="Self.TblCart" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TblUsers">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="TblCart">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TblCartItems_TblCart">
+    <End Role="TblCart" Type="Self.TblCart" Multiplicity="1" />
+    <End Role="TblCartItems" Type="Self.TblCartItems" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TblCart">
+        <PropertyRef Name="CartId" />
+      </Principal>
+      <Dependent Role="TblCartItems">
+        <PropertyRef Name="CartId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TblCartItems_TblDevice">
+    <End Role="TblDevice" Type="Self.TblDevice" Multiplicity="1" />
+    <End Role="TblCartItems" Type="Self.TblCartItems" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TblDevice">
+        <PropertyRef Name="DeviceId" />
+      </Principal>
+      <Dependent Role="TblCartItems">
+        <PropertyRef Name="DeviceId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TblReceipt_TblUsers">
+    <End Role="TblUsers" Type="Self.TblUsers" Multiplicity="0..1" />
+    <End Role="TblReceipt" Type="Self.TblReceipt" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TblUsers">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="TblReceipt">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="zTest2DBModelStoreContainer">
+    <EntitySet Name="TblCart" EntityType="Self.TblCart" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TblCartItems" EntityType="Self.TblCartItems" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TblCategory" EntityType="Self.TblCategory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TblDevice" EntityType="Self.TblDevice" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TblReceipt" EntityType="Self.TblReceipt" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TblShop" EntityType="Self.TblShop" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TblUsers" EntityType="Self.TblUsers" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__TblDevice__Categ__15502E78" Association="Self.FK__TblDevice__Categ__15502E78">
+      <End Role="TblCategory" EntitySet="TblCategory" />
+      <End Role="TblDevice" EntitySet="TblDevice" />
+    </AssociationSet>
+    <AssociationSet Name="FK__TblDevice__Shop__145C0A3F" Association="Self.FK__TblDevice__Shop__145C0A3F">
+      <End Role="TblShop" EntitySet="TblShop" />
+      <End Role="TblDevice" EntitySet="TblDevice" />
+    </AssociationSet>
+    <AssociationSet Name="FK__TblReceip__Devic__182C9B23" Association="Self.FK__TblReceip__Devic__182C9B23">
+      <End Role="TblDevice" EntitySet="TblDevice" />
+      <End Role="TblReceipt" EntitySet="TblReceipt" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TblCart_TblUsers" Association="Self.FK_TblCart_TblUsers">
+      <End Role="TblUsers" EntitySet="TblUsers" />
+      <End Role="TblCart" EntitySet="TblCart" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TblCartItems_TblCart" Association="Self.FK_TblCartItems_TblCart">
+      <End Role="TblCart" EntitySet="TblCart" />
+      <End Role="TblCartItems" EntitySet="TblCartItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TblCartItems_TblDevice" Association="Self.FK_TblCartItems_TblDevice">
+      <End Role="TblDevice" EntitySet="TblDevice" />
+      <End Role="TblCartItems" EntitySet="TblCartItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TblReceipt_TblUsers" Association="Self.FK_TblReceipt_TblUsers">
+      <End Role="TblUsers" EntitySet="TblUsers" />
+      <End Role="TblReceipt" EntitySet="TblReceipt" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

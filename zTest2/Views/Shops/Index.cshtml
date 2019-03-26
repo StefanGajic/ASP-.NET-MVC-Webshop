@@ -1,0 +1,66 @@
+﻿@model IEnumerable<zTest2.Models.TblShop>
+
+@{
+    ViewBag.Title = "Shops";
+}
+
+<h2>Shops</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<style>
+    .row-background {
+        background: rgb(30, 87, 153);
+        color: white;
+    }
+</style>
+
+<table class="table">
+    <tr class="row-background">
+        <th>
+            @Html.DisplayNameFor(model => model.ShopName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NoOfEmployees)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TaxIdentificationNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateOfFounding)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShopName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NoOfEmployees)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TaxIdentificationNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateOfFounding)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ShopId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ShopId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ShopId })
+            </td>
+        </tr>
+    }
+
+</table>

@@ -1,0 +1,72 @@
+﻿@model zTest2.Models.TblUser
+@{
+    ViewBag.Title = "Your Profile";
+}
+
+<h2>@ViewBag.Title</h2>
+<p class="text-success">@ViewBag.Message</p>
+<p class="text-success">@ViewBag.StatusMessage</p>
+<div>
+
+    @if (Model != null)
+    {
+        <hr />
+        <div style="width: 23%; float: left; margin-bottom: 50px">
+            <img src="~/Content/user.png" alt="avatar" style="max-width: 200px;"/>
+        </div>
+        <div style="width: 75%; float: left; margin-bottom: 100px">
+            <p><strong>First name:</strong> @Model.FirstName</p>
+            <p><strong>Last name:</strong> @Model.LastName</p>
+            <p><strong>Role:</strong> @(Model.Role ? "Admin" : "Customer")</p>
+            <p><strong>Phone:</strong> @Model.Phone</p>
+            <p><strong>Email:</strong> @Model.Email</p>
+        </div>
+        <hr />
+    <div style="">
+        <h4>Change your account settings</h4>
+
+        <dl class="dl-horizontal">
+            <dt>Password:</dt>
+            <dd>
+                @Html.ActionLink("Change your password", "ChangePassword", "Manage")
+            </dd>
+
+            <dt>First name:</dt>
+            <dd>
+                @Html.ActionLink("Change your first name", "ChangeFirstName", "Manage")
+            </dd>
+
+            <dt>Last name:</dt>
+            <dd>
+                @Html.ActionLink("Change your last name", "ChangeLastName", "Manage")
+            </dd>
+
+            <dt>Phone number:</dt>
+            <dd>
+                @Html.ActionLink("Change your phone number", "ChangePhone", "Manage")
+            </dd>
+
+            <dt>Email:</dt>
+            <dd>
+                @Html.ActionLink("Change your email address", "ChangeEmail", "Manage")
+            </dd>
+
+
+            <dt></dt>
+
+        </dl>
+
+        <hr />
+
+        @if (Session["user"] != null)
+        {
+            if ((Session["user"] as zTest2.Models.TblUser).Role)
+            {
+            <h4>Check purchases</h4>
+
+            @Html.ActionLink("Check purchases", "Purchases", "Manage")
+            }
+        }
+    </div>
+    }
+</div>

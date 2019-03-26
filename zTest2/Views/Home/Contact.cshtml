@@ -1,0 +1,66 @@
+﻿@{
+    ViewBag.Title = "Contact us";
+}
+<h2>@ViewBag.Title</h2>
+
+
+<h2>We would like to hear from you!</h2>
+<h3>Send your comments and suggestions, we promise to answer as soon as posible</h3>
+
+
+   
+        <div class="forma">
+    <form role="form" >
+        <div class="form-group">
+            <label for="textName">Name</label>
+            <input id="textName" type="text" name="Name" class="form-control" />
+
+            <label for="textEmail">Email address</label>
+            <input id="textEmail" type="email" name="Email" class="form-control" />
+
+            <label for="textComment">Comment</label>
+            <textarea class="form-control" id="textComment" rows="5" cols="20"></textarea>
+        </div>
+
+
+    </form>
+
+    <div class="buttonToSend">
+        <button type="submit" class="btn btn-info" data-toggle="modal" data-target="#modalni1" data-backdrop="static">Send comment</button>
+    </div>
+    <div class="modal fade" id="modalni1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" style="color:black">Your comment has been sent.</h4>
+                </div>
+                <div class="modal-body">
+                    <p style="color:black">Thank you for your time!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+ 
+
+<hr />
+<br />
+
+    <div class="contactUs" style="text-align:center">
+    <p>We are conviently located at:</p>
+
+    <address>
+        Bulevar Oslobodjenja 119<br />
+        Novi Sad, Serbia<br />
+    </address>
+
+    <p>WE ARE OPEN:</p>
+
+    <p>MONDAY - FRIDAY  7AM - 3PM</p>
+
+ </div>

@@ -1,0 +1,34 @@
+﻿@model List<System.Linq.IGrouping<System.Nullable<System.DateTime>, zTest2.Models.TblReceipt>>
+@{
+	ViewBag.Title = "Purchases";
+}
+
+<h2>Purchases:</h2>
+<br/>
+<h4>By Date:</h4>
+@using (@Html.BeginForm("Purchases", "Manage", FormMethod.Post)){
+	@Html.Raw("Date from:<br/> <input class=\"form-control\" type=\"date\" name=\"datefrom\"/><br/><br/>")
+	@Html.Raw("Date to:<br/> <input class=\"form-control\" type=\"date\" name=\"dateto\" /><br /><br />")
+	<button class="btn btn-primary">Filter</button>    <a href="Purchases" class="btn btn-warning">Clear filter</a><br /><br />
+}
+
+<table class="table-bordered" style="width: 100%">
+	<tr><th>Date</th><th>User</th><th>Details</th></tr>
+	@foreach (var group in Model)
+	{   string items = "| ";
+
+		<tr>
+			<td>@group.Key</td>
+			<td>@group.ToList()[0].TblUser.UserName</td>
+
+
+			@foreach (zTest2.Models.TblReceipt item in group.ToList())
+			{
+				items += item.TblDevice.DeviceName + " x " + item.Amount + " | ";
+			}
+
+			<td>@items</td>
+
+		</tr>
+	}
+</table>
