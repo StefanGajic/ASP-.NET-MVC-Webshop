@@ -11,7 +11,6 @@ namespace zTest2.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
     
     public partial class TblDevice
     {
@@ -23,13 +22,10 @@ namespace zTest2.Models
         }
     
         public int DeviceId { get; set; }
-        [Display(Name="Device")]
         public string DeviceName { get; set; }
-        [Display(Name = "Description")]
         public string DescriptionDevice { get; set; }
         public string Components { get; set; }
         public Nullable<int> Shop { get; set; }
-        [Display(Name = "Made In")]
         public string MadeInCountry { get; set; }
         public Nullable<int> Quantity { get; set; }
         public string Price { get; set; }

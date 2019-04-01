@@ -81,6 +81,8 @@
           <Property Name="Role" Type="bit" Nullable="false" />
           <Property Name="Phone" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="Email" Type="varchar" MaxLength="60" Nullable="false" />
+          <Property Name="Salt" Type="varbinary" MaxLength="1024" />
+          <Property Name="HashedPass" Type="varbinary" MaxLength="1024" />
         </EntityType>
         <Association Name="FK__TblDevice__Categ__15502E78">
           <End Role="TblCategory" Type="Self.TblCategory" Multiplicity="0..1" />
@@ -324,6 +326,8 @@
           <Property Name="Email" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="TblCarts" Relationship="zTest2DBModel.FK_TblCart_TblUsers" FromRole="TblUser" ToRole="TblCart" />
           <NavigationProperty Name="TblReceipts" Relationship="zTest2DBModel.FK_TblReceipt_TblUsers" FromRole="TblUser" ToRole="TblReceipt" />
+          <Property Name="Salt" Type="Binary" MaxLength="1024" FixedLength="false" />
+          <Property Name="HashedPass" Type="Binary" MaxLength="1024" FixedLength="false" />
         </EntityType>
         <EntityType Name="TblCart">
           <Key>
@@ -467,6 +471,8 @@
           <EntitySetMapping Name="TblUsers">
             <EntityTypeMapping TypeName="zTest2DBModel.TblUser">
               <MappingFragment StoreEntitySet="TblUsers">
+                <ScalarProperty Name="HashedPass" ColumnName="HashedPass" />
+                <ScalarProperty Name="Salt" ColumnName="Salt" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Phone" ColumnName="Phone" />
                 <ScalarProperty Name="Role" ColumnName="Role" />

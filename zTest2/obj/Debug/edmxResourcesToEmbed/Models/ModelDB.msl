@@ -43,6 +43,8 @@
     <EntitySetMapping Name="TblUsers">
       <EntityTypeMapping TypeName="zTest2DBModel.TblUser">
         <MappingFragment StoreEntitySet="TblUsers">
+          <ScalarProperty Name="HashedPass" ColumnName="HashedPass" />
+          <ScalarProperty Name="Salt" ColumnName="Salt" />
           <ScalarProperty Name="Email" ColumnName="Email" />
           <ScalarProperty Name="Phone" ColumnName="Phone" />
           <ScalarProperty Name="Role" ColumnName="Role" />

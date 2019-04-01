@@ -29,6 +29,8 @@ namespace zTest2.Models
         public bool Role { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
+        public byte[] Salt { get; set; }
+        public byte[] HashedPass { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TblCart> TblCarts { get; set; }

@@ -163,7 +163,12 @@ namespace zTest2.Controllers
                 receiptItem.DateAndTime = purchaseDate;
                 receiptItem.DeviceId = cartItem.DeviceId;
                 receiptItem.UserId = (Session["user"] as TblUser).UserId;
-                receiptItem.Tax = 20;
+
+                string taxValue = System.Configuration.ConfigurationManager.AppSettings["taxValue"];
+                int x;
+                int.TryParse(taxValue, out x);
+
+                receiptItem.Tax = x;
                 receiptItem.PriceWithTax = (int)(int.Parse(storeDB.TblDevices.Find(cartItem.DeviceId).Price) * cartItem.Amount * 1.20);
 
                 storeDB.TblReceipts.Add(receiptItem);

@@ -11,12 +11,39 @@ using Microsoft.Owin.Security;
 using zTest2.Models;
 using System.Data.Entity;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace zTest2.Controllers
 {
 
     public class AccountController : Controller
     {
+
+        static RNGCryptoServiceProvider random = new RNGCryptoServiceProvider();
+        static SHA256 encryptor = SHA256.Create();
+        readonly static int SaltLength = 32;
+
+
+        public static byte[] MakeSalt(int maxLength)
+        {
+            var Salt = new byte[maxLength];
+            random.GetNonZeroBytes(Salt);
+            return Salt;
+        }
+
+        public static byte[] ComputeHash(string inputString, byte[] salt)
+        {
+            byte[] inputBytes = Encoding.UTF8.GetBytes(inputString);
+            var salted = new byte[salt.Length + inputBytes.Length];
+
+            inputBytes.CopyTo(salted, 0);
+            salt.CopyTo(salted, inputBytes.Length);
+
+            var hashed = encryptor.ComputeHash(salted);
+
+            return hashed;
+        }
   
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
@@ -31,21 +58,28 @@ namespace zTest2.Controllers
         {
             string username = model.UserName;
             string password = model.Password;
-
+            
             zTest2DBEntities db = new zTest2DBEntities();
 
             List<TblUser> allUsers = db.TblUsers.ToList();
 
             foreach (var user in allUsers)
-            {
+            {                                           
                 if (user.UserName.Equals(username) && user.Password.Equals(password))
                 {
-                  
-                    Session["user"] = user; 
 
-                    Session.Timeout = 60;
+                    var salt = user.Salt;
+                    var hash = ComputeHash(password, salt);
+                    if (user.UserName.Equals(username) && hash.Equals(user.HashedPass))
+                    {
+                        Session["user"] = user;
 
-                    return RedirectToAction("Index", "Home"); 
+                        Session.Timeout = 60;
+
+                        return RedirectToAction("Index", "Home");
+                    }
+
+                    
                 }
             }
 
@@ -58,7 +92,6 @@ namespace zTest2.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-
             return View();
         }
 
@@ -77,7 +110,9 @@ namespace zTest2.Controllers
                 newUser.FirstName = model.Name;
                 newUser.LastName = model.LastName;
                 newUser.Phone = model.Phone;
-                newUser.Password = model.Password;
+                var salt = MakeSalt(SaltLength);
+                newUser.Salt = salt;
+                newUser.HashedPass = ComputeHash(model.Password, salt);       
                 newUser.UserName = model.UserName;
 
                 db.TblUsers.Add(newUser);

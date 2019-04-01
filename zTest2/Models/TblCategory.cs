@@ -11,7 +11,6 @@ namespace zTest2.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
     
     public partial class TblCategory
     {
@@ -22,7 +21,6 @@ namespace zTest2.Models
         }
     
         public int CategoryId { get; set; }
-        [Display(Name = "Category")]
         public string CategoryName { get; set; }
         public string Description { get; set; }
         public string Subcategory { get; set; }

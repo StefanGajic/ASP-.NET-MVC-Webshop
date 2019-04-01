@@ -76,6 +76,8 @@
     <Property Name="Role" Type="bit" Nullable="false" />
     <Property Name="Phone" Type="varchar" MaxLength="20" Nullable="false" />
     <Property Name="Email" Type="varchar" MaxLength="60" Nullable="false" />
+    <Property Name="Salt" Type="varbinary" MaxLength="1024" />
+    <Property Name="HashedPass" Type="varbinary" MaxLength="1024" />
   </EntityType>
   <Association Name="FK__TblDevice__Categ__15502E78">
     <End Role="TblCategory" Type="Self.TblCategory" Multiplicity="0..1" />

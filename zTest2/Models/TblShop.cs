@@ -11,7 +11,6 @@ namespace zTest2.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
     
     public partial class TblShop
     {
@@ -22,14 +21,10 @@ namespace zTest2.Models
         }
     
         public int ShopId { get; set; }
-        [Display(Name = "Shop")]
         public string ShopName { get; set; }
         public string Address { get; set; }
-        [Display(Name = "Employees")]
         public Nullable<int> NoOfEmployees { get; set; }
-        [Display(Name = "Tax Number")]
         public Nullable<int> TaxIdentificationNo { get; set; }
-        [Display(Name = "Founding Date")]
         public Nullable<System.DateTime> DateOfFounding { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

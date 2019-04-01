@@ -117,6 +117,8 @@
     <Property Name="Email" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="TblCarts" Relationship="zTest2DBModel.FK_TblCart_TblUsers" FromRole="TblUser" ToRole="TblCart" />
     <NavigationProperty Name="TblReceipts" Relationship="zTest2DBModel.FK_TblReceipt_TblUsers" FromRole="TblUser" ToRole="TblReceipt" />
+    <Property Name="Salt" Type="Binary" MaxLength="1024" FixedLength="false" />
+    <Property Name="HashedPass" Type="Binary" MaxLength="1024" FixedLength="false" />
   </EntityType>
   <EntityType Name="TblCart">
     <Key>
