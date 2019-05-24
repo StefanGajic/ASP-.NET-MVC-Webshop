@@ -13,7 +13,7 @@ namespace zTest2
     {
         public void ConfigureAuth(IAppBuilder app)
         {
-           
+
         }
     }
 }

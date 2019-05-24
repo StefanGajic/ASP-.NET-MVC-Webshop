@@ -3,50 +3,50 @@
 }
 <h2>@ViewBag.Title</h2>
 
-
 <h2>We would like to hear from you!</h2>
 <h3>Send your comments and suggestions, we promise to answer as soon as posible</h3>
 
+<script>
+    function validateForm() {
+        var name = document.forms["myForm"]["Name"].value;
+        if (name == "") {
+            alert("Name must be filled out");
+            return false;
+        }
+        var email = document.forms["myForm"]["Email"].value;
+        if (email == "") {
+            alert("Please provide email");
+            return false;
+        }
+        var comment = document.forms["myForm"]["Comment"].value;
+        if (comment == "") {
+            alert("Please write your comment");
+            return false;
+        }
+    }
+</script>
 
-   
-        <div class="forma">
-    <form role="form" >
-        <div class="form-group">
-            <label for="textName">Name</label>
-            <input id="textName" type="text" name="Name" class="form-control" />
+<form name="myForm" onsubmit="return validateForm()" method="post" >
 
-            <label for="textEmail">Email address</label>
-            <input id="textEmail" type="email" name="Email" class="form-control" />
-
-            <label for="textComment">Comment</label>
-            <textarea class="form-control" id="textComment" rows="5" cols="20"></textarea>
-        </div>
-
-
-    </form>
-
-    <div class="buttonToSend">
-        <button type="submit" class="btn btn-info" data-toggle="modal" data-target="#modalni1" data-backdrop="static">Send comment</button>
+    <div>
+        <label for="textName">Name</label>
+        <input id="textName" type="text" name="Name" class="form-control" />
     </div>
-    <div class="modal fade" id="modalni1" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title" style="color:black">Your comment has been sent.</h4>
-                </div>
-                <div class="modal-body">
-                    <p style="color:black">Thank you for your time!</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
+    <div>
+        <label for="textEmail">Email address</label>
+        <input id="textEmail" type="email" name="Email" class="form-control" />
     </div>
-</div>
-    
- 
+    <div>
+        <label for="textComment">Comment</label>
+        <textarea class="form-control" name="Comment" rows="5" cols="20"></textarea>
+    </div>
+    <br />
+    <div>
+        <button type="submit" class="btn btn-info">Send comment</button>
+    </div>
+
+</form>
+
 
 <hr />
 <br />

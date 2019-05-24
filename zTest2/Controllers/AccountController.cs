@@ -9,10 +9,11 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using zTest2.Models;
-using System.Data.Entity;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
+using System.Data.Entity.Validation;
+
 
 namespace zTest2.Controllers
 {
@@ -44,49 +45,6 @@ namespace zTest2.Controllers
 
             return hashed;
         }
-  
-        [AllowAnonymous]
-        public ActionResult Login(string returnUrl)
-        {
-            ViewBag.ReturnUrl = returnUrl;
-            return View();
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
-        {
-            string username = model.UserName;
-            string password = model.Password;
-            
-            zTest2DBEntities db = new zTest2DBEntities();
-
-            List<TblUser> allUsers = db.TblUsers.ToList();
-
-            foreach (var user in allUsers)
-            {                                           
-                if (user.UserName.Equals(username) && user.Password.Equals(password))
-                {
-
-                    var salt = user.Salt;
-                    var hash = ComputeHash(password, salt);
-                    if (user.UserName.Equals(username) && hash.Equals(user.HashedPass))
-                    {
-                        Session["user"] = user;
-
-                        Session.Timeout = 60;
-
-                        return RedirectToAction("Index", "Home");
-                    }
-
-                    
-                }
-            }
-
-            return View(model); 
-
-           
-        }
 
 
         [AllowAnonymous]
@@ -106,29 +64,89 @@ namespace zTest2.Controllers
 
                 TblUser newUser = new TblUser();
 
+
+                newUser.UserName = model.UserName;
                 newUser.Email = model.Email;
                 newUser.FirstName = model.Name;
                 newUser.LastName = model.LastName;
                 newUser.Phone = model.Phone;
                 var salt = MakeSalt(SaltLength);
                 newUser.Salt = salt;
-                newUser.HashedPass = ComputeHash(model.Password, salt);       
-                newUser.UserName = model.UserName;
+                newUser.HashedPass = ComputeHash(model.Password, salt);
+               
 
                 db.TblUsers.Add(newUser);
-                db.SaveChanges();
+
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (DbEntityValidationException e)
+                {
+
+                    Console.WriteLine(e);
+                }
+               
 
                 Session["user"] = (db.TblUsers.Select(x => x).OrderByDescending(x => x.UserId).Take(1)).ToList()[0];
 
                 Session["welcome msg"] = "Hello " + newUser.FirstName + "!";
 
                 return RedirectToAction("Index", "Manage");
-         
+
             }
 
             return View(model);
         }
+
   
+        [AllowAnonymous]
+        public ActionResult Login(string returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        {
+            
+            string username = model.UserName;
+            string password = model.Password;
+            
+            zTest2DBEntities db = new zTest2DBEntities();
+
+            List<TblUser> allUsers = db.TblUsers.ToList();
+
+            foreach (var user in allUsers)
+            {
+
+                var salt = user.Salt;
+                if (salt == null) continue;
+                var hash = ComputeHash(password, salt);
+
+                string hashString = System.Text.Encoding.UTF8.GetString(hash);
+                string passHash = System.Text.Encoding.UTF8.GetString(user.HashedPass);
+
+                if (string.Equals(hashString, passHash) && user.UserName.Equals(username))
+                {
+                   
+                    Session["user"] = user;
+
+                    Session.Timeout = 60;
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+
+            ModelState.AddModelError("", "Invalid username or password!");
+
+            return View(model); 
+
+           
+        }
+
+
         public ActionResult AdminRights()
         {
             List<TblUser> model = new List<TblUser>();
